@@ -49,9 +49,12 @@ def save_log(log):
         json.dump(log, f, indent=2, ensure_ascii=False)
 
 
-def get_posted_ids(log):
-    """Get set of already-posted post IDs."""
-    return {entry["post_id"] for entry in log.get("posted", [])}
+def get_posted_ids(log, platform=None):
+    """Get set of already-posted post IDs, optionally filtered by platform."""
+    entries = log.get("posted", [])
+    if platform:
+        entries = [e for e in entries if e.get("platform") == platform]
+    return {entry["post_id"] for entry in entries}
 
 
 def get_platform_key(platform):
@@ -68,11 +71,16 @@ def get_platform_key(platform):
     return mapping.get(platform)
 
 
+def get_cycle_count(log, platform):
+    """Count how many full cycles have been completed for a platform."""
+    entries = [e for e in log.get("posted", []) if e.get("platform") == platform]
+    return len(entries)
+
+
 def get_next_post(platform, specific_id=None):
-    """Get the next unposted post for a platform."""
+    """Get the next post for a platform. Cycles endlessly through all posts."""
     posts = load_posts()
     log = load_log()
-    posted_ids = get_posted_ids(log)
 
     platform_key = get_platform_key(platform)
     if not platform_key or platform_key not in posts:
@@ -82,6 +90,7 @@ def get_next_post(platform, specific_id=None):
     platform_posts = posts[platform_key]
 
     if specific_id:
+        posted_ids = get_posted_ids(log, platform)
         for post in platform_posts:
             if post["id"] == specific_id:
                 if specific_id in posted_ids:
@@ -90,19 +99,28 @@ def get_next_post(platform, specific_id=None):
         print(f"Error: Post ID '{specific_id}' not found.")
         sys.exit(1)
 
-    for post in platform_posts:
-        if post["id"] not in posted_ids:
-            return post
+    # Calculate which post is next using modulo to cycle forever
+    total_posted = get_cycle_count(log, platform)
+    total_posts = len(platform_posts)
 
-    print(f"All {platform} posts have been sent! Add more to posts.json.")
-    return None
+    if total_posts == 0:
+        print(f"No posts found for {platform}.")
+        return None
+
+    next_index = total_posted % total_posts
+    cycle_number = (total_posted // total_posts) + 1
+    post = platform_posts[next_index]
+
+    if total_posted >= total_posts:
+        print(f"[Cycle {cycle_number}] Recycling posts for {platform} (post {next_index + 1}/{total_posts})")
+
+    return post
 
 
-def get_unposted_posts(platform):
-    """Get all unposted posts for a platform."""
+def get_remaining_in_cycle(platform):
+    """Get remaining posts in the current cycle for a platform."""
     posts = load_posts()
     log = load_log()
-    posted_ids = get_posted_ids(log)
 
     platform_key = get_platform_key(platform)
     if not platform_key or platform_key not in posts:
@@ -110,7 +128,14 @@ def get_unposted_posts(platform):
         sys.exit(1)
 
     platform_posts = posts[platform_key]
-    return [p for p in platform_posts if p["id"] not in posted_ids]
+    total_posted = get_cycle_count(log, platform)
+    total_posts = len(platform_posts)
+
+    if total_posts == 0:
+        return []
+
+    current_index = total_posted % total_posts
+    return platform_posts[current_index:]
 
 
 def log_post(post_id, platform, result="success", details=""):
@@ -328,12 +353,18 @@ def main():
     args = parser.parse_args()
 
     if args.preview_all:
-        unposted = get_unposted_posts(args.platform)
-        if not unposted:
-            print(f"No unposted messages for {args.platform}.")
+        remaining = get_remaining_in_cycle(args.platform)
+        if not remaining:
+            print(f"No posts found for {args.platform}.")
             return
-        print(f"Found {len(unposted)} unposted {args.platform} messages:\n")
-        for post in unposted:
+        posts_data = load_posts()
+        platform_key = get_platform_key(args.platform)
+        total = len(posts_data[platform_key])
+        log = load_log()
+        posted_count = get_cycle_count(log, args.platform)
+        cycle = (posted_count // total) + 1 if total > 0 else 1
+        print(f"Cycle {cycle}: {len(remaining)} posts remaining in this cycle ({posted_count} total posted):\n")
+        for post in remaining:
             preview_post(post, args.platform)
         return
 
