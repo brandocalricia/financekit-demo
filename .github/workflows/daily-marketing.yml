@@ -2,7 +2,7 @@ name: Daily Marketing Posts
 
 on:
   schedule:
-    # Twitter + Bluesky: daily at 10am EST (3pm UTC)
+    # Bluesky + Mastodon: daily at 10am EST (3pm UTC)
     - cron: '0 15 * * *'
   workflow_dispatch:
     inputs:
@@ -11,16 +11,15 @@ on:
         required: true
         type: choice
         options:
-          - twitter
           - bluesky
-          - linkedin
+          - mastodon
       dry_run:
         description: 'Dry run (preview only, no posting)'
         required: false
         type: boolean
         default: false
       post_id:
-        description: 'Specific post ID (optional, e.g. twitter_05)'
+        description: 'Specific post ID (optional, e.g. bsky_05)'
         required: false
         type: string
         default: ''
@@ -29,46 +28,6 @@ permissions:
   contents: write
 
 jobs:
-  post-twitter:
-    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.platform == 'twitter')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install tweepy
-
-      - name: Post to Twitter
-        env:
-          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
-          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
-          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-          TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
-        run: |
-          FLAGS=""
-          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            FLAGS="$FLAGS --dry-run"
-          fi
-          if [ -n "${{ github.event.inputs.post_id }}" ]; then
-            FLAGS="$FLAGS --post-id ${{ github.event.inputs.post_id }}"
-          fi
-          python marketing/post_scheduler.py --platform twitter $FLAGS
-
-      - name: Commit post log
-        if: github.event.inputs.dry_run != 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add marketing/post_log.json
-          git diff --staged --quiet || git commit -m "Update post log after Twitter post"
-          git push
-
   post-bluesky:
     if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.platform == 'bluesky')
     runs-on: ubuntu-latest
@@ -104,8 +63,8 @@ jobs:
           git diff --staged --quiet || git commit -m "Update post log after Bluesky post"
           git push
 
-  post-linkedin:
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.platform == 'linkedin'
+  post-mastodon:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.platform == 'mastodon')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -116,9 +75,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Post to LinkedIn
+      - name: Post to Mastodon
         env:
-          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          MASTODON_INSTANCE: ${{ secrets.MASTODON_INSTANCE }}
+          MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
         run: |
           FLAGS=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -127,7 +87,7 @@ jobs:
           if [ -n "${{ github.event.inputs.post_id }}" ]; then
             FLAGS="$FLAGS --post-id ${{ github.event.inputs.post_id }}"
           fi
-          python marketing/post_scheduler.py --platform linkedin $FLAGS
+          python marketing/post_scheduler.py --platform mastodon $FLAGS
 
       - name: Commit post log
         if: github.event.inputs.dry_run != 'true'
@@ -135,5 +95,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add marketing/post_log.json
-          git diff --staged --quiet || git commit -m "Update post log after LinkedIn post"
+          git diff --staged --quiet || git commit -m "Update post log after Mastodon post"
           git push

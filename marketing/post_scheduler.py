@@ -3,18 +3,17 @@
 FinanceKit Marketing Post Scheduler
 
 Reads marketing posts from posts.json, tracks posted history in post_log.json,
-and posts to Twitter, Bluesky, or LinkedIn via their respective APIs.
+and posts to Bluesky and Mastodon via their respective APIs.
 
 Usage:
-    python post_scheduler.py --platform twitter --dry-run
-    python post_scheduler.py --platform bluesky
-    python post_scheduler.py --platform linkedin --preview-all
-    python post_scheduler.py --platform twitter --post-id twitter_05
+    python post_scheduler.py --platform bluesky --dry-run
+    python post_scheduler.py --platform mastodon
+    python post_scheduler.py --platform bluesky --preview-all
+    python post_scheduler.py --platform mastodon --post-id masto_05
 
 Environment variables required:
-    Twitter:  TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
     Bluesky:  BLUESKY_HANDLE, BLUESKY_APP_PASSWORD
-    LinkedIn: LINKEDIN_ACCESS_TOKEN
+    Mastodon: MASTODON_INSTANCE, MASTODON_ACCESS_TOKEN
 """
 
 import argparse
@@ -60,9 +59,8 @@ def get_posted_ids(log, platform=None):
 def get_platform_key(platform):
     """Map platform argument to posts.json key."""
     mapping = {
-        "twitter": "twitter",
         "bluesky": "bluesky",
-        "linkedin": "linkedin",
+        "mastodon": "mastodon",
         "producthunt": "product_hunt",
         "hackernews": "hacker_news",
         "instagram": "instagram_tiktok",
@@ -72,7 +70,7 @@ def get_platform_key(platform):
 
 
 def get_cycle_count(log, platform):
-    """Count how many full cycles have been completed for a platform."""
+    """Count how many posts have been made for a platform."""
     entries = [e for e in log.get("posted", []) if e.get("platform") == platform]
     return len(entries)
 
@@ -163,12 +161,10 @@ def preview_post(post, platform):
         print(f"\n{post['text']}")
         char_count = len(post["text"])
         print(f"\n[{char_count}/300 characters]")
-    elif platform == "twitter":
+    elif platform == "mastodon":
         print(f"\n{post['text']}")
         char_count = len(post["text"])
-        print(f"\n[{char_count}/280 characters]")
-    elif platform == "linkedin":
-        print(f"\n{post['text']}")
+        print(f"\n[{char_count}/500 characters]")
     elif platform in ("producthunt", "hackernews"):
         print(f"Title: {post.get('title', post.get('tagline', 'N/A'))}")
         if "body" in post:
@@ -181,42 +177,6 @@ def preview_post(post, platform):
 
 
 # --- Platform posting functions ---
-
-def post_to_twitter(post):
-    """Post a tweet using Twitter API v2 via tweepy."""
-    try:
-        import tweepy
-    except ImportError:
-        print("Error: tweepy is not installed. Run: pip install tweepy")
-        sys.exit(1)
-
-    api_key = os.environ.get("TWITTER_API_KEY")
-    api_secret = os.environ.get("TWITTER_API_SECRET")
-    access_token = os.environ.get("TWITTER_ACCESS_TOKEN")
-    access_secret = os.environ.get("TWITTER_ACCESS_SECRET")
-
-    if not all([api_key, api_secret, access_token, access_secret]):
-        print("Error: Missing Twitter API credentials in environment variables.")
-        print("Required: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET")
-        sys.exit(1)
-
-    client = tweepy.Client(
-        consumer_key=api_key,
-        consumer_secret=api_secret,
-        access_token=access_token,
-        access_token_secret=access_secret,
-    )
-
-    text = post["text"]
-    if len(text) > 280:
-        print(f"Warning: Tweet is {len(text)} characters (max 280). Truncating.")
-        text = text[:277] + "..."
-
-    response = client.create_tweet(text=text)
-    tweet_id = response.data["id"]
-    print(f"Tweet posted successfully! ID: {tweet_id}")
-    return f"tweet_id:{tweet_id}"
-
 
 def post_to_bluesky(post):
     """Post to Bluesky using the AT Protocol API."""
@@ -287,70 +247,51 @@ def post_to_bluesky(post):
         sys.exit(1)
 
 
-def post_to_linkedin(post):
-    """Post to LinkedIn using the LinkedIn API."""
+def post_to_mastodon(post):
+    """Post to Mastodon using the Mastodon API."""
     import urllib.request
     import urllib.error
 
-    access_token = os.environ.get("LINKEDIN_ACCESS_TOKEN")
-    if not access_token:
-        print("Error: Missing LINKEDIN_ACCESS_TOKEN environment variable.")
+    instance = os.environ.get("MASTODON_INSTANCE", "").rstrip("/")
+    access_token = os.environ.get("MASTODON_ACCESS_TOKEN")
+
+    if not all([instance, access_token]):
+        print("Error: Missing Mastodon credentials in environment variables.")
+        print("Required: MASTODON_INSTANCE (e.g. https://mastodon.social), MASTODON_ACCESS_TOKEN")
         sys.exit(1)
 
-    # Get the user's LinkedIn profile ID
-    profile_url = "https://api.linkedin.com/v2/userinfo"
-    req = urllib.request.Request(profile_url)
-    req.add_header("Authorization", f"Bearer {access_token}")
+    text = post["text"]
+    if len(text) > 500:
+        print(f"Warning: Post is {len(text)} characters (max 500). Truncating.")
+        text = text[:497] + "..."
 
-    try:
-        with urllib.request.urlopen(req) as response:
-            profile_data = json.loads(response.read().decode())
-            person_id = profile_data["sub"]
-    except urllib.error.HTTPError as e:
-        print(f"Error fetching LinkedIn profile: {e.code} {e.reason}")
-        sys.exit(1)
+    post_url = f"{instance}/api/v1/statuses"
+    post_data = json.dumps({
+        "status": text,
+        "visibility": "public",
+    }).encode("utf-8")
 
-    # Create the post
-    post_url = "https://api.linkedin.com/v2/ugcPosts"
-    post_data = {
-        "author": f"urn:li:person:{person_id}",
-        "lifecycleState": "PUBLISHED",
-        "specificContent": {
-            "com.linkedin.ugc.ShareContent": {
-                "shareCommentary": {
-                    "text": post["text"]
-                },
-                "shareMediaCategory": "NONE",
-            }
-        },
-        "visibility": {
-            "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
-        },
-    }
-
-    data = json.dumps(post_data).encode("utf-8")
-    req = urllib.request.Request(post_url, data=data, method="POST")
+    req = urllib.request.Request(post_url, data=post_data, method="POST")
     req.add_header("Authorization", f"Bearer {access_token}")
     req.add_header("Content-Type", "application/json")
-    req.add_header("X-Restli-Protocol-Version", "2.0.0")
 
     try:
         with urllib.request.urlopen(req) as response:
             result = json.loads(response.read().decode())
-            post_urn = result.get("id", "unknown")
-            print(f"LinkedIn post published! URN: {post_urn}")
-            return f"linkedin_urn:{post_urn}"
+            status_url = result.get("url", "unknown")
+            status_id = result.get("id", "unknown")
+            print(f"Mastodon post published! URL: {status_url}")
+            return f"mastodon_url:{status_url}"
     except urllib.error.HTTPError as e:
         error_body = e.read().decode()
-        print(f"Error posting to LinkedIn: {e.code} {e.reason}")
+        print(f"Error posting to Mastodon: {e.code} {e.reason}")
         print(f"Details: {error_body}")
         sys.exit(1)
 
 
 PLATFORM_POSTERS = {
-    "twitter": post_to_twitter,
     "bluesky": post_to_bluesky,
-    "linkedin": post_to_linkedin,
+    "mastodon": post_to_mastodon,
 }
 
 
@@ -361,7 +302,7 @@ def main():
     parser.add_argument(
         "--platform",
         required=True,
-        choices=["twitter", "bluesky", "linkedin", "producthunt", "hackernews", "instagram", "tiktok"],
+        choices=["bluesky", "mastodon", "producthunt", "hackernews", "instagram", "tiktok"],
         help="Platform to post to",
     )
     parser.add_argument(
@@ -378,7 +319,7 @@ def main():
         "--post-id",
         type=str,
         default=None,
-        help="Post a specific post by ID (e.g., twitter_05)",
+        help="Post a specific post by ID (e.g., bsky_05)",
     )
 
     args = parser.parse_args()

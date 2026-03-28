@@ -7,12 +7,12 @@
     },
     {
       "id": "bsky_02",
-      "text": "Found $47/month in subscriptions I forgot I was paying for.\n\nThat is $564/year just gone.\n\nUsed the subscription auditor in FinanceKit to find them all. The tool costs $29.99 one-time.\n\nMath checks out.\n\nfinancekit.streamlit.app",
+      "text": "Found $47/month in subscriptions I forgot I was paying for.\n\nThat's $564/year just gone.\n\nUsed the subscription auditor in FinanceKit to find them all. The tool costs $29.99 one-time.\n\nMath checks out.\n\nfinancekit.streamlit.app",
       "tone": "social_proof"
     },
     {
       "id": "bsky_03",
-      "text": "Tired of spreadsheets for tracking your finances?\n\nMe too. That is why I built FinanceKit - 5 tools in one:\n- Receipt Scanner\n- Portfolio Tracker\n- Report Generator\n- Job Tracker\n- Subscription Auditor\n\nBuilt with Python. $29.99 once. Done.\n\n5207453582610.gumroad.com/l/zbnsjc",
+      "text": "Tired of spreadsheets for tracking your finances?\n\nMe too. That's why I built FinanceKit - 5 tools in one:\n- Receipt Scanner\n- Portfolio Tracker\n- Report Generator\n- Job Tracker\n- Subscription Auditor\n\nBuilt with Python. $29.99 once. Done.\n\n5207453582610.gumroad.com/l/zbnsjc",
       "tone": "pain_point"
     },
     {
@@ -22,17 +22,17 @@
     },
     {
       "id": "bsky_05",
-      "text": "What is your biggest pain point with managing personal finances?\n\nFor me it was receipt scanning. So I built a tool that does it with OCR.\n\nThen I added 4 more modules because apparently I cannot stop building things.\n\nfinancekit.streamlit.app",
+      "text": "What's your biggest pain point with managing personal finances?\n\nFor me it was receipt scanning. So I built a tool that does it with OCR.\n\nThen I added 4 more modules because apparently I can't stop building things.\n\nfinancekit.streamlit.app",
       "tone": "engagement"
     },
     {
       "id": "bsky_06",
-      "text": "Freelancers: how do you track your gig income?\n\nI built a job tracker that keeps freelance income separate from personal expenses. It is part of FinanceKit - 5 finance tools for $29.99.\n\nFree demo: financekit.streamlit.app",
+      "text": "Freelancers: how do you track your gig income?\n\nI built a job tracker that keeps freelance income separate from personal expenses. It's part of FinanceKit - 5 finance tools for $29.99.\n\nFree demo: financekit.streamlit.app",
       "tone": "audience_specific"
     },
     {
       "id": "bsky_07",
-      "text": "The best budgeting app is the one you actually use.\n\nI could not stick with any of them, so I built my own with Python.\n\nFinanceKit: simple, runs locally, privacy-first, $29.99 one-time.\n\nfinancekit.streamlit.app",
+      "text": "The best budgeting app is the one you actually use.\n\nI couldn't stick with any of them, so I built my own with Python.\n\nFinanceKit: simple, runs locally, privacy-first, $29.99 one-time.\n\nfinancekit.streamlit.app",
       "tone": "philosophical"
     },
     {
@@ -52,75 +52,75 @@
     },
     {
       "id": "bsky_11",
-      "text": "College students: you do not need a $15/mo budgeting app.\n\nYou need FinanceKit ($29.99 once) or honestly just a spreadsheet.\n\nBut if you want receipt scanning, subscription auditing, and actual reports... the toolkit is right here:\n\nfinancekit.streamlit.app",
+      "text": "College students: you don't need a $15/mo budgeting app.\n\nYou need FinanceKit ($29.99 once) or honestly just a spreadsheet.\n\nBut if you want receipt scanning, subscription auditing, and actual reports... the toolkit is right here:\n\nfinancekit.streamlit.app",
       "tone": "audience_specific"
     },
     {
       "id": "bsky_12",
-      "text": "Day 1 of selling a Python tool on Gumroad.\n\nBuilt FinanceKit - a personal finance toolkit with Streamlit.\n\n5 modules. $29.99. One-time payment.\n\nLet us see what happens.\n\n5207453582610.gumroad.com/l/zbnsjc",
+      "text": "Day 1 of selling a Python tool on Gumroad.\n\nBuilt FinanceKit - a personal finance toolkit with Streamlit.\n\n5 modules. $29.99. One-time payment.\n\nLet's see what happens.\n\n5207453582610.gumroad.com/l/zbnsjc",
       "tone": "build_in_public"
     }
   ],
-  "twitter": [
+  "mastodon": [
     {
-      "id": "twitter_01",
-      "text": "I built a personal finance toolkit because I was tired of paying monthly for apps that do less than a spreadsheet.\n\nFinanceKit: receipt scanner, portfolio tracker, subscription auditor, report generator, job tracker.\n\n$29.99 one-time. No subscriptions. Ironic, right?\n\nTry the free demo ⬇️\nhttps://financekit.streamlit.app\n\n#personalfinance #buildinpublic #indiemaker",
+      "id": "masto_01",
+      "text": "I built a personal finance toolkit because I was tired of paying monthly for budgeting apps.\n\nFinanceKit: receipt scanner, portfolio tracker, subscription auditor, report generator, job tracker.\n\n$29.99 one-time. No subscriptions. Built with Python.\n\nFree demo: https://financekit.streamlit.app\n\n#personalfinance #python #indiedev #foss",
       "tone": "launch"
     },
     {
-      "id": "twitter_02",
-      "text": "Tired of spreadsheets for tracking your finances?\n\nMe too. That's why I built FinanceKit — 5 tools in one:\n• Receipt Scanner\n• Portfolio Tracker\n• Report Generator\n• Job Tracker\n• Subscription Auditor\n\nBuilt with Python. $29.99 once. Done.\n\nhttps://5207453582610.gumroad.com/l/zbnsjc\n\n#fintech #pythondev",
-      "tone": "pain_point"
-    },
-    {
-      "id": "twitter_03",
-      "text": "The subscription auditor in FinanceKit found $47/month in subscriptions I forgot I was paying for.\n\nThat's $564/year.\n\nThe tool costs $29.99.\n\nMath checks out.\n\nhttps://financekit.streamlit.app\n\n#personalfinance #moneysaving",
+      "id": "masto_02",
+      "text": "Ran my subscription auditor on my own accounts. Found $47/month in subscriptions I forgot about.\n\n$564/year. Gone.\n\nThe tool that found them costs $29.99 one-time.\n\nhttps://financekit.streamlit.app\n\n#personalfinance #budgeting #subscriptions",
       "tone": "social_proof"
     },
     {
-      "id": "twitter_04",
-      "text": "What's your biggest pain point with managing personal finances?\n\nFor me it was receipt scanning. So I built a tool that does it with OCR.\n\nThen I added 4 more modules because apparently I can't stop.\n\nhttps://financekit.streamlit.app\n\n#buildinpublic #indiemaker #fintech",
-      "tone": "engagement"
-    },
-    {
-      "id": "twitter_05",
-      "text": "QuickBooks Self-Employed: $15/month ($180/year)\nYNAB: $14.99/month ($180/year)\nMint: discontinued\n\nFinanceKit: $29.99 once. Forever.\n\nReceipt scanner, portfolio tracker, reports, job tracker, subscription auditor.\n\nhttps://5207453582610.gumroad.com/l/zbnsjc\n\n#personalfinance #fintech #budgeting",
+      "id": "masto_03",
+      "text": "QuickBooks Self-Employed: $15/month\nYNAB: $14.99/month\nMint: dead\n\nFinanceKit: $29.99 once. Forever. Runs locally. Your data stays yours.\n\nReceipt scanner, portfolio tracker, reports, job tracker, subscription auditor.\n\nhttps://5207453582610.gumroad.com/l/zbnsjc\n\n#personalfinance #privacy #python",
       "tone": "comparison"
     },
     {
-      "id": "twitter_06",
-      "text": "Freelancers: how do you track your gig income?\n\nI built a job tracker module that keeps freelance income separate from personal expenses. It's part of FinanceKit — 5 finance tools for $29.99.\n\nFree demo: https://financekit.streamlit.app\n\n#freelance #gigeconomy #buildinpublic",
+      "id": "masto_04",
+      "text": "Built a receipt scanner with Python OCR and it turned into a full finance toolkit.\n\n5 modules: receipt scanning, portfolio tracking, report generation, job tracking, subscription auditing.\n\nThe OCR is about 90% accurate on real receipts. Image preprocessing (deskew, contrast, noise reduction) was the key.\n\nSource: https://github.com/brandocalricia/financekit-demo\n\n#python #ocr #streamlit #opensource",
+      "tone": "technical"
+    },
+    {
+      "id": "masto_05",
+      "text": "Freelancers: how do you track gig income separately from personal expenses?\n\nI built a job tracker module for exactly this. It's part of FinanceKit — 5 finance tools, $29.99 one-time, runs on your machine.\n\nFree demo: https://financekit.streamlit.app\n\n#freelance #gigeconomy #finance",
       "tone": "audience_specific"
     },
     {
-      "id": "twitter_07",
-      "text": "Day 1 of selling a Python tool on Gumroad.\n\nBuilt FinanceKit — a personal finance toolkit with Streamlit.\n\n5 modules. $29.99. One-time payment.\n\nLet's see what happens.\n\nhttps://5207453582610.gumroad.com/l/zbnsjc\n\n#buildinpublic #indiemaker #pythondev #gumroad",
-      "tone": "build_in_public"
-    },
-    {
-      "id": "twitter_08",
-      "text": "Tax season protip: scan your receipts throughout the year instead of scrambling in April.\n\nI built a receipt scanner into FinanceKit for exactly this reason. Snap a pic → data extracted → categorized automatically.\n\nDemo: https://financekit.streamlit.app\n\n#taxseason #personalfinance #receipts",
-      "tone": "seasonal"
-    },
-    {
-      "id": "twitter_09",
-      "text": "The best budgeting app is the one you actually use.\n\nI couldn't stick with any of them, so I built my own.\n\nFinanceKit: simple, local, Python-powered, $29.99.\n\nhttps://financekit.streamlit.app\n\n#personalfinance #budgeting #python",
+      "id": "masto_06",
+      "text": "The best budgeting app is the one you actually use.\n\nI couldn't stick with any of the popular ones, so I built my own with Python and Streamlit.\n\nFinanceKit: 5 modules, privacy-first, $29.99 one-time, no cloud dependency.\n\nhttps://financekit.streamlit.app\n\n#personalfinance #python #privacy #selfhosted",
       "tone": "philosophical"
     },
     {
-      "id": "twitter_10",
-      "text": "Just shipped a portfolio tracker module for FinanceKit.\n\nTrack your investments without connecting your brokerage account. No data sharing. Everything stays local.\n\nPrivacy-first finance tools > cloud-only finance apps.\n\nhttps://financekit.streamlit.app\n\n#fintech #privacy #investing #buildinpublic",
-      "tone": "feature_highlight"
+      "id": "masto_07",
+      "text": "Tax season protip: scan your receipts throughout the year.\n\nI built a receipt scanner into FinanceKit that extracts merchant, amount, date, and category from receipt photos using OCR.\n\nSnap a pic → data extracted → categorized. Done.\n\nDemo: https://financekit.streamlit.app\n\n#tax #receipts #personalfinance #ocr",
+      "tone": "seasonal"
     },
     {
-      "id": "twitter_11",
-      "text": "College students: you don't need a $15/mo budgeting app.\n\nYou need FinanceKit ($29.99 once) or honestly just a spreadsheet.\n\nBut if you want receipt scanning, subscription auditing, and actual reports… the toolkit is right here:\n\nhttps://financekit.streamlit.app\n\n#college #budgeting #personalfinance",
+      "id": "masto_08",
+      "text": "Privacy-first finance tracking:\n\n- No cloud accounts required\n- No brokerage credentials shared\n- No data leaves your machine\n- Built with Python — inspect the code yourself\n\nFinanceKit: receipt scanner, portfolio tracker, reports, job tracker, subscription auditor.\n\n$29.99 one-time: https://5207453582610.gumroad.com/l/zbnsjc\n\n#privacy #selfhosted #personalfinance #python",
+      "tone": "privacy_focused"
+    },
+    {
+      "id": "masto_09",
+      "text": "Turned a weekend Python project into an actual product.\n\nStarted with a receipt scanner → added portfolio tracking → subscription auditing → reports → job tracker.\n\nNow it's FinanceKit, 5 modules, selling on Gumroad for $29.99.\n\nThe demo is open source: https://github.com/brandocalricia/financekit-demo\n\n#python #indiedev #buildinpublic #gumroad",
+      "tone": "build_story"
+    },
+    {
+      "id": "masto_10",
+      "text": "College students and young professionals: you don't need expensive budgeting software.\n\nFinanceKit is $29.99 one-time (less than 2 months of YNAB) and includes:\n- Receipt scanner\n- Portfolio tracker\n- Subscription auditor\n- Report generator\n- Job tracker\n\nFree demo: https://financekit.streamlit.app\n\n#budgeting #personalfinance #college #youngprofessionals",
       "tone": "audience_specific"
     },
     {
-      "id": "twitter_12",
-      "text": "Built a full personal finance toolkit with Python + Streamlit and put it on Gumroad.\n\nTech stack:\n• Python 3.11\n• Streamlit\n• OCR for receipt scanning\n• Pandas for data processing\n\nOpen source demo: https://github.com/brandocalricia/financekit-demo\n\nFull version: https://5207453582610.gumroad.com/l/zbnsjc\n\n#python #streamlit #opensource",
-      "tone": "technical"
+      "id": "masto_11",
+      "text": "Small confession: I built FinanceKit for myself and then realized other people might want it too.\n\nI was paying for 3 different tools to manage my freelance finances. Now I use one that I built and it costs $29.99 once.\n\nSometimes the best product is the one that scratches your own itch.\n\nhttps://financekit.streamlit.app\n\n#indiedev #buildinpublic #freelance",
+      "tone": "personal"
+    },
+    {
+      "id": "masto_12",
+      "text": "Open source personal finance demo — looking for feedback.\n\nFinanceKit demo is on GitHub with 5 modules: receipt scanning, portfolio tracking, reports, job tracking, subscription auditing.\n\nBuilt with Python + Streamlit.\n\nGitHub: https://github.com/brandocalricia/financekit-demo\nLive: https://financekit.streamlit.app\n\nPRs and issues welcome.\n\n#opensource #python #streamlit #finance",
+      "tone": "community"
     }
   ],
   "product_hunt": [
@@ -153,42 +153,10 @@
       "tone": "open_source"
     }
   ],
-  "linkedin": [
-    {
-      "id": "linkedin_01",
-      "text": "After years of juggling QuickBooks, spreadsheets, and budgeting apps, I decided to build the finance tool I actually wanted.\n\nThe result is FinanceKit — a personal finance toolkit with 5 modules:\n\n• Receipt Scanner (OCR-powered)\n• Portfolio Tracker\n• Report Generator\n• Job Tracker (built for freelancers)\n• Subscription Auditor\n\nWhat makes it different:\n→ $29.99 one-time. No monthly subscription.\n→ Runs locally. Your financial data stays on your machine.\n→ Built with Python, so you can customize it.\n\nI built this because I'm a freelancer and I was spending more time managing my finance tools than actually managing my finances.\n\nIf you're a freelancer, gig worker, or small business owner who's tired of overpaying for financial software — check out the free demo:\n\nhttps://financekit.streamlit.app\n\nFull toolkit: https://5207453582610.gumroad.com/l/zbnsjc\n\nI'd love to hear what financial tools you're currently using and what's missing from them.",
-      "tone": "professional_launch"
-    },
-    {
-      "id": "linkedin_02",
-      "text": "I ran the Subscription Auditor from my finance toolkit on my own accounts last month.\n\nFound $47/month in subscriptions I'd forgotten about:\n• Cloud storage I migrated away from 6 months ago\n• A meal kit service that \"unpaused\" itself\n• A streaming trial that auto-converted\n• A domain I no longer use\n\nThat's $564/year.\n\nThis is exactly why I built FinanceKit. It's easy to lose track of recurring charges when they're spread across multiple cards and accounts.\n\nThe Subscription Auditor module gives you one clear view of every recurring charge. No connecting bank accounts required — it works with the data you provide.\n\nFree demo: https://financekit.streamlit.app\n\nHow much do you think you're spending on forgotten subscriptions?",
-      "tone": "story_with_data"
-    },
-    {
-      "id": "linkedin_03",
-      "text": "Tax season reminder for freelancers:\n\nIf you're not tracking receipts throughout the year, April is going to hurt.\n\nI built a Receipt Scanner module into FinanceKit that lets you:\n→ Snap a photo of any receipt\n→ Automatically extract merchant, amount, date, and line items\n→ Categorize expenses\n→ Generate reports your accountant will actually thank you for\n\nIt uses OCR and runs locally — your receipt data never leaves your machine.\n\nThe full toolkit (5 modules including portfolio tracking, subscription auditing, and job tracking) is $29.99 one-time on Gumroad.\n\nFree demo: https://financekit.streamlit.app\n\nWhat's your current system for tracking business expenses?",
-      "tone": "seasonal_professional"
-    },
-    {
-      "id": "linkedin_04",
-      "text": "The economics of personal finance software don't make sense to me.\n\nYNAB: $14.99/month\nQuickBooks Self-Employed: $15/month\nMint: shut down entirely\n\nYou're paying $180+/year for basic financial tracking. And if the company decides to shut down (looking at you, Mint), you lose everything.\n\nThat's why I built FinanceKit:\n• 5 finance modules (receipt scanner, portfolio tracker, reports, job tracker, subscription auditor)\n• $29.99 one-time payment\n• Runs locally on your machine\n• Built with Python — you own the code\n\nIt's not as polished as a VC-backed SaaS product. But it works, it's affordable, and it won't disappear when a company pivots.\n\nTry the demo: https://financekit.streamlit.app\n\nFull version: https://5207453582610.gumroad.com/l/zbnsjc",
-      "tone": "thought_leadership"
-    },
-    {
-      "id": "linkedin_05",
-      "text": "Lessons from launching my first digital product:\n\n1. A working demo converts better than any landing page. I put FinanceKit's demo live at https://financekit.streamlit.app and it outperformed every other marketing effort combined.\n\n2. Price anchoring matters. At $29.99 one-time vs. $15/month for competitors, the value proposition is immediately obvious.\n\n3. Solve your own problem first. I built FinanceKit because I needed it as a freelancer. Turns out other freelancers needed it too.\n\n4. Don't wait for perfection. I launched with \"good enough\" and improved based on actual user feedback.\n\n5. Gumroad makes distribution easy. 10% cut, but zero infrastructure headaches.\n\nFinanceKit is a personal finance toolkit with 5 modules: receipt scanning, portfolio tracking, report generation, job tracking, and subscription auditing.\n\nIf you're thinking about launching a digital product — just do it. The worst that happens is you learn a lot.",
-      "tone": "lessons_learned"
-    },
-    {
-      "id": "linkedin_06",
-      "text": "Small business owners: how much time do you spend on financial admin each week?\n\nI used to spend 3-4 hours every week on:\n• Entering receipts into spreadsheets\n• Checking which subscriptions hit this month\n• Updating my investment tracker\n• Formatting reports for my accountant\n\nNow I spend about 30 minutes using FinanceKit.\n\nThe receipt scanner alone saves me an hour a week. Instead of typing in receipt data, I scan it and the OCR handles extraction.\n\nI built this tool for myself but it turns out a lot of people have the same problem.\n\nFree demo: https://financekit.streamlit.app\n\n$29.99 one-time for the full version. No subscriptions, no recurring fees.\n\nTime is money — especially when you're running a small business.",
-      "tone": "time_saving"
-    }
-  ],
   "instagram_tiktok": [
     {
       "id": "ig_01",
-      "text": "found $47/month in subscriptions I forgot I was paying for 😱\n\nthat’s $564/year gone.\n\nused the subscription auditor in FinanceKit to find them all in one view.\n\nlink in bio to try the free demo 👆\n\n#personalfinance #moneysaving #subscriptions #budgeting #fintech #financetips",
+      "text": "found $47/month in subscriptions I forgot I was paying for 😱\n\nthat's $564/year gone.\n\nused the subscription auditor in FinanceKit to find them all in one view.\n\nlink in bio to try the free demo 👆\n\n#personalfinance #moneysaving #subscriptions #budgeting #fintech #financetips",
       "tone": "discovery"
     },
     {
@@ -203,7 +171,7 @@
     },
     {
       "id": "ig_04",
-      "text": "freelancer finance hack: scan every receipt the day you get it 🧳\n\nyour future self (and your accountant) will thank you during tax season.\n\nI use FinanceKit’s receipt scanner — snap a pic and it extracts all the data automatically.\n\nfree demo link in bio\n\n#freelance #taxseason #receipts #freelancertips #moneytips #finance",
+      "text": "freelancer finance hack: scan every receipt the day you get it 🧳\n\nyour future self (and your accountant) will thank you during tax season.\n\nI use FinanceKit's receipt scanner — snap a pic and it extracts all the data automatically.\n\nfree demo link in bio\n\n#freelance #taxseason #receipts #freelancertips #moneytips #finance",
       "tone": "tip"
     },
     {
