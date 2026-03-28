@@ -13,6 +13,13 @@
       "timestamp": "2026-03-28T21:00:15.093343+00:00",
       "result": "success",
       "details": "mastodon_url:https://mastodon.social/@brandocalricia/116308811086888371"
+    },
+    {
+      "post_id": "bsky_02",
+      "platform": "bluesky",
+      "timestamp": "2026-03-28T21:03:08.311572+00:00",
+      "result": "success",
+      "details": "bsky_uri:at://did:plc:qrg7x7qilijgoq2ze2qrudgo/app.bsky.feed.post/3mi5jswzznq2t"
     }
   ]
 }
