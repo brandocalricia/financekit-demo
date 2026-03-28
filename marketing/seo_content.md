@@ -25,7 +25,7 @@
 >
 > **Tech:** Built with Python and Streamlit. Runs locally on your computer — your data never leaves your machine.
 >
-> **Try before you buy:** Free live demo at https://financekit.streamlit.app
+> **Try before you buy:** Free live demo at https://financekit-demo-financekit.streamlit.app
 
 ---
 
@@ -46,7 +46,7 @@
    - Wave (free but ad-supported)
 4. Comparison table with features, price, privacy rating
 5. Conclusion — Why one-time payment tools beat "free" tools long-term
-6. CTA: Try FinanceKit demo at https://financekit.streamlit.app
+6. CTA: Try FinanceKit demo at https://financekit-demo-financekit.streamlit.app
 
 ---
 

@@ -24,7 +24,7 @@ I just launched something I've been working on for a while — **FinanceKit**, a
 I built this because I was paying for QuickBooks, YNAB, and still using a spreadsheet. Three tools to do what one should. So I built that one tool.
 
 You can try the full demo for free before buying:
-**[Try the Demo](https://financekit.streamlit.app)**
+**[Try the Demo](https://financekit-demo-financekit.streamlit.app)**
 
 If it's useful, the full version is on Gumroad:
 **[Get FinanceKit — $29.99](https://5207453582610.gumroad.com/l/zbnsjc)**
@@ -100,7 +100,7 @@ If you're not familiar: **FinanceKit is a personal finance toolkit with 5 module
 
 **[Get FinanceKit at 40% Off](https://5207453582610.gumroad.com/l/zbnsjc)**
 
-Not sure? Try the free demo first: **[financekit.streamlit.app](https://financekit.streamlit.app)**
+Not sure? Try the free demo first: **[financekit-demo-financekit.streamlit.app](https://financekit-demo-financekit.streamlit.app)**
 
 This price is available through {end_date}. After that it goes back to $29.99.
 
