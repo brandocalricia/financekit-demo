@@ -2,7 +2,7 @@ name: Daily Marketing Posts
 
 on:
   schedule:
-    # Twitter: daily at 10am EST (3pm UTC)
+    # Twitter + Bluesky: daily at 10am EST (3pm UTC)
     - cron: '0 15 * * *'
   workflow_dispatch:
     inputs:
@@ -12,7 +12,7 @@ on:
         type: choice
         options:
           - twitter
-          - reddit
+          - bluesky
           - linkedin
       dry_run:
         description: 'Dry run (preview only, no posting)'
@@ -69,8 +69,8 @@ jobs:
           git diff --staged --quiet || git commit -m "Update post log after Twitter post"
           git push
 
-  post-reddit:
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.platform == 'reddit'
+  post-bluesky:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.platform == 'bluesky')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -81,15 +81,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install praw
-
-      - name: Post to Reddit
+      - name: Post to Bluesky
         env:
-          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
         run: |
           FLAGS=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
@@ -98,7 +93,7 @@ jobs:
           if [ -n "${{ github.event.inputs.post_id }}" ]; then
             FLAGS="$FLAGS --post-id ${{ github.event.inputs.post_id }}"
           fi
-          python marketing/post_scheduler.py --platform reddit $FLAGS
+          python marketing/post_scheduler.py --platform bluesky $FLAGS
 
       - name: Commit post log
         if: github.event.inputs.dry_run != 'true'
@@ -106,7 +101,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add marketing/post_log.json
-          git diff --staged --quiet || git commit -m "Update post log after Reddit post"
+          git diff --staged --quiet || git commit -m "Update post log after Bluesky post"
           git push
 
   post-linkedin:
@@ -141,51 +136,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add marketing/post_log.json
           git diff --staged --quiet || git commit -m "Update post log after LinkedIn post"
-          git push
-
-  # Scheduled Reddit posting - runs every 3 days
-  scheduled-reddit:
-    if: github.event_name == 'schedule'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check if today is a Reddit day (every 3 days)
-        id: check_day
-        run: |
-          DAY_OF_YEAR=$(date +%j)
-          if [ $((DAY_OF_YEAR % 3)) -eq 0 ]; then
-            echo "should_post=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_post=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Checkout repository
-        if: steps.check_day.outputs.should_post == 'true'
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        if: steps.check_day.outputs.should_post == 'true'
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        if: steps.check_day.outputs.should_post == 'true'
-        run: pip install praw
-
-      - name: Post to Reddit
-        if: steps.check_day.outputs.should_post == 'true'
-        env:
-          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
-        run: python marketing/post_scheduler.py --platform reddit
-
-      - name: Commit post log
-        if: steps.check_day.outputs.should_post == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add marketing/post_log.json
-          git diff --staged --quiet || git commit -m "Update post log after scheduled Reddit post"
           git push

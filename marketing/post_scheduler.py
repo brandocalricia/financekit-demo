@@ -3,17 +3,17 @@
 FinanceKit Marketing Post Scheduler
 
 Reads marketing posts from posts.json, tracks posted history in post_log.json,
-and posts to Twitter, Reddit, or LinkedIn via their respective APIs.
+and posts to Twitter, Bluesky, or LinkedIn via their respective APIs.
 
 Usage:
     python post_scheduler.py --platform twitter --dry-run
-    python post_scheduler.py --platform reddit
+    python post_scheduler.py --platform bluesky
     python post_scheduler.py --platform linkedin --preview-all
     python post_scheduler.py --platform twitter --post-id twitter_05
 
 Environment variables required:
     Twitter:  TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET
-    Reddit:   REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USERNAME, REDDIT_PASSWORD, REDDIT_USER_AGENT
+    Bluesky:  BLUESKY_HANDLE, BLUESKY_APP_PASSWORD
     LinkedIn: LINKEDIN_ACCESS_TOKEN
 """
 
@@ -61,7 +61,7 @@ def get_platform_key(platform):
     """Map platform argument to posts.json key."""
     mapping = {
         "twitter": "twitter",
-        "reddit": "reddit",
+        "bluesky": "bluesky",
         "linkedin": "linkedin",
         "producthunt": "product_hunt",
         "hackernews": "hacker_news",
@@ -159,10 +159,10 @@ def preview_post(post, platform):
     print(f"Tone:     {post.get('tone', 'N/A')}")
     print(f"{'='*60}")
 
-    if platform == "reddit":
-        print(f"Subreddit: {post.get('target_subreddit', 'N/A')}")
-        print(f"Title:     {post['title']}")
-        print(f"\n{post['body']}")
+    if platform == "bluesky":
+        print(f"\n{post['text']}")
+        char_count = len(post["text"])
+        print(f"\n[{char_count}/300 characters]")
     elif platform == "twitter":
         print(f"\n{post['text']}")
         char_count = len(post["text"])
@@ -218,42 +218,73 @@ def post_to_twitter(post):
     return f"tweet_id:{tweet_id}"
 
 
-def post_to_reddit(post):
-    """Post to Reddit using PRAW."""
+def post_to_bluesky(post):
+    """Post to Bluesky using the AT Protocol API."""
+    import urllib.request
+    import urllib.error
+
+    handle = os.environ.get("BLUESKY_HANDLE")
+    app_password = os.environ.get("BLUESKY_APP_PASSWORD")
+
+    if not all([handle, app_password]):
+        print("Error: Missing Bluesky credentials in environment variables.")
+        print("Required: BLUESKY_HANDLE, BLUESKY_APP_PASSWORD")
+        sys.exit(1)
+
+    # Authenticate and get session token
+    auth_url = "https://bsky.social/xrpc/com.atproto.server.createSession"
+    auth_data = json.dumps({
+        "identifier": handle,
+        "password": app_password,
+    }).encode("utf-8")
+
+    req = urllib.request.Request(auth_url, data=auth_data, method="POST")
+    req.add_header("Content-Type", "application/json")
+
     try:
-        import praw
-    except ImportError:
-        print("Error: praw is not installed. Run: pip install praw")
+        with urllib.request.urlopen(req) as response:
+            session = json.loads(response.read().decode())
+            access_token = session["accessJwt"]
+            did = session["did"]
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode()
+        print(f"Error authenticating with Bluesky: {e.code} {e.reason}")
+        print(f"Details: {error_body}")
         sys.exit(1)
 
-    client_id = os.environ.get("REDDIT_CLIENT_ID")
-    client_secret = os.environ.get("REDDIT_CLIENT_SECRET")
-    username = os.environ.get("REDDIT_USERNAME")
-    password = os.environ.get("REDDIT_PASSWORD")
-    user_agent = os.environ.get("REDDIT_USER_AGENT", f"FinanceKit Marketing Bot by /u/{username}")
+    # Create the post
+    text = post["text"]
+    if len(text) > 300:
+        print(f"Warning: Post is {len(text)} characters (max 300). Truncating.")
+        text = text[:297] + "..."
 
-    if not all([client_id, client_secret, username, password]):
-        print("Error: Missing Reddit API credentials in environment variables.")
-        print("Required: REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USERNAME, REDDIT_PASSWORD")
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    post_url = "https://bsky.social/xrpc/com.atproto.repo.createRecord"
+    post_data = json.dumps({
+        "repo": did,
+        "collection": "app.bsky.feed.post",
+        "record": {
+            "$type": "app.bsky.feed.post",
+            "text": text,
+            "createdAt": now,
+        },
+    }).encode("utf-8")
+
+    req = urllib.request.Request(post_url, data=post_data, method="POST")
+    req.add_header("Content-Type", "application/json")
+    req.add_header("Authorization", f"Bearer {access_token}")
+
+    try:
+        with urllib.request.urlopen(req) as response:
+            result = json.loads(response.read().decode())
+            post_uri = result.get("uri", "unknown")
+            print(f"Bluesky post published! URI: {post_uri}")
+            return f"bsky_uri:{post_uri}"
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode()
+        print(f"Error posting to Bluesky: {e.code} {e.reason}")
+        print(f"Details: {error_body}")
         sys.exit(1)
-
-    reddit = praw.Reddit(
-        client_id=client_id,
-        client_secret=client_secret,
-        username=username,
-        password=password,
-        user_agent=user_agent,
-    )
-
-    subreddit_name = post["target_subreddit"].replace("r/", "")
-    subreddit = reddit.subreddit(subreddit_name)
-
-    submission = subreddit.submit(
-        title=post["title"],
-        selftext=post["body"],
-    )
-    print(f"Reddit post submitted! URL: https://reddit.com{submission.permalink}")
-    return f"reddit_url:https://reddit.com{submission.permalink}"
 
 
 def post_to_linkedin(post):
@@ -318,7 +349,7 @@ def post_to_linkedin(post):
 
 PLATFORM_POSTERS = {
     "twitter": post_to_twitter,
-    "reddit": post_to_reddit,
+    "bluesky": post_to_bluesky,
     "linkedin": post_to_linkedin,
 }
 
@@ -330,7 +361,7 @@ def main():
     parser.add_argument(
         "--platform",
         required=True,
-        choices=["twitter", "reddit", "linkedin", "producthunt", "hackernews", "instagram", "tiktok"],
+        choices=["twitter", "bluesky", "linkedin", "producthunt", "hackernews", "instagram", "tiktok"],
         help="Platform to post to",
     )
     parser.add_argument(
