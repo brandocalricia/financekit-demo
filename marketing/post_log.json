@@ -1,3 +1,11 @@
 {
-  "posted": []
+  "posted": [
+    {
+      "post_id": "bsky_01",
+      "platform": "bluesky",
+      "timestamp": "2026-03-28T20:44:30.694574+00:00",
+      "result": "success",
+      "details": "bsky_uri:at://did:plc:qrg7x7qilijgoq2ze2qrudgo/app.bsky.feed.post/3mi5irn7adh2x"
+    }
+  ]
 }
