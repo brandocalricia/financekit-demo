@@ -4,65 +4,41 @@ Automated marketing post scheduler for FinanceKit using GitHub Actions.
 
 ## Overview
 
-This system maintains a library of pre-written marketing posts (`posts.json`) and automatically publishes them on a schedule via GitHub Actions. It tracks what's been posted in `post_log.json` to avoid duplicates.
+This system maintains a library of pre-written marketing posts (`posts.json`) and automatically publishes them on a schedule via GitHub Actions. It tracks what's been posted in `post_log.json` and cycles through posts infinitely — no maintenance required.
 
-**Supported platforms:** Twitter/X, Reddit, LinkedIn
+**Automated platforms:** Bluesky, Mastodon
 **Manual-only platforms:** Product Hunt, Hacker News, Instagram/TikTok (posts are in the library for copy-paste use)
 
 ## Quick Start
 
 1. Get your API credentials (see below)
 2. Add them as GitHub Secrets
-3. Enable the workflow — it posts to Twitter daily and Reddit every 3 days
+3. Enable the workflow — it posts to Bluesky and Mastodon daily at 10am EST
 4. Or trigger manually from the Actions tab
 
 ---
 
 ## Step 1: Get API Credentials
 
-### Twitter/X API Keys
+### Bluesky App Password
 
-1. Go to [developer.twitter.com](https://developer.twitter.com) and sign in
-2. Create a new Project and App (or use an existing one)
-3. In your App settings, go to **Keys and Tokens**
-4. Generate or regenerate:
-   - **API Key** (Consumer Key)
-   - **API Key Secret** (Consumer Secret)
-   - **Access Token**
-   - **Access Token Secret**
-5. Make sure your App has **Read and Write** permissions:
-   - Go to App Settings > User authentication settings > Edit
-   - Set App permissions to **Read and Write**
-   - Save changes, then regenerate your Access Token and Secret
+1. Log into [bsky.app](https://bsky.app)
+2. Go to **Settings** > **Privacy and Security** > **App Passwords**
+3. Click **Add App Password**
+4. Give it a name like "FinanceKit Marketing"
+5. Copy the generated password — you won't see it again
+6. Your handle is your Bluesky username (e.g., `yourname.bsky.social`)
 
-**Important:** After changing permissions, you MUST regenerate your access token and secret.
+### Mastodon Access Token
 
-### Reddit API Credentials
-
-1. Go to [reddit.com/prefs/apps](https://www.reddit.com/prefs/apps)
-2. Scroll to the bottom and click **"create another app..."**
+1. Log into your Mastodon instance (e.g., `mastodon.social`)
+2. Go to **Preferences** > **Development** > **New Application**
 3. Fill in:
-   - **Name:** FinanceKit Marketing Bot
-   - **Type:** Select **script**
-   - **Description:** Marketing automation for FinanceKit
-   - **redirect uri:** `http://localhost:8080` (required but not used for script apps)
-4. Click **Create app**
-5. Note down:
-   - **Client ID** — the string under the app name (looks like: `aBcDeFg1234`)
-   - **Client Secret** — labeled "secret"
-6. You'll also need your Reddit **username** and **password**
-
-**Important:** Your Reddit account must meet subreddit posting requirements (minimum karma, account age, etc.). Consider building karma on your account before automating posts.
-
-### LinkedIn API
-
-1. Go to [linkedin.com/developers](https://www.linkedin.com/developers/)
-2. Create a new App
-3. Request the **Share on LinkedIn** and **Sign In with LinkedIn using OpenID Connect** products
-4. In the **Auth** tab, generate an OAuth 2.0 access token with `w_member_social` and `openid` scopes
-5. Note: LinkedIn access tokens expire (typically 60 days). You'll need to refresh them periodically.
-
-**Note:** LinkedIn API access for posting requires an approved app. This may take a few days.
+   - **Application name:** FinanceKit Marketing
+   - **Scopes:** Check `write:statuses` (minimum needed)
+4. Click **Submit**
+5. Click on your new application and copy the **Access Token**
+6. Note your instance URL (e.g., `https://mastodon.social`)
 
 ---
 
@@ -74,15 +50,10 @@ This system maintains a library of pre-written marketing posts (`posts.json`) an
 
 | Secret Name | Value |
 |---|---|
-| `TWITTER_API_KEY` | Your Twitter API Key |
-| `TWITTER_API_SECRET` | Your Twitter API Key Secret |
-| `TWITTER_ACCESS_TOKEN` | Your Twitter Access Token |
-| `TWITTER_ACCESS_SECRET` | Your Twitter Access Token Secret |
-| `REDDIT_CLIENT_ID` | Your Reddit app Client ID |
-| `REDDIT_CLIENT_SECRET` | Your Reddit app Secret |
-| `REDDIT_USERNAME` | Your Reddit username |
-| `REDDIT_PASSWORD` | Your Reddit password |
-| `LINKEDIN_ACCESS_TOKEN` | Your LinkedIn OAuth access token |
+| `BLUESKY_HANDLE` | Your Bluesky handle (e.g., `yourname.bsky.social`) |
+| `BLUESKY_APP_PASSWORD` | Your Bluesky app password |
+| `MASTODON_INSTANCE` | Your Mastodon instance URL (e.g., `https://mastodon.social`) |
+| `MASTODON_ACCESS_TOKEN` | Your Mastodon access token |
 
 ---
 
@@ -92,11 +63,10 @@ The GitHub Action (`.github/workflows/daily-marketing.yml`) runs on this schedul
 
 | Platform | Frequency | Time |
 |---|---|---|
-| Twitter | Daily | 10:00 AM EST (3:00 PM UTC) |
-| Reddit | Every 3 days | 10:00 AM EST (3:00 PM UTC) |
-| LinkedIn | Manual only | Trigger from Actions tab |
+| Bluesky | Daily | 10:00 AM EST (3:00 PM UTC) |
+| Mastodon | Daily | 10:00 AM EST (3:00 PM UTC) |
 
-The scheduler picks the next unposted message from `posts.json` and logs it in `post_log.json`.
+The scheduler picks the next post from `posts.json` and logs it in `post_log.json`. After all posts have been used, it **cycles back to the beginning** and repeats forever.
 
 ---
 
@@ -107,9 +77,9 @@ The scheduler picks the next unposted message from `posts.json` and logs it in `
 3. Select **"Daily Marketing Posts"** from the left sidebar
 4. Click **"Run workflow"**
 5. Choose:
-   - **Platform:** twitter, reddit, or linkedin
+   - **Platform:** bluesky or mastodon
    - **Dry run:** Check this to preview without posting
-   - **Post ID:** Optionally specify a post ID (e.g., `twitter_05`)
+   - **Post ID:** Optionally specify a post ID (e.g., `bsky_05`)
 6. Click **"Run workflow"**
 
 ---
@@ -118,53 +88,47 @@ The scheduler picks the next unposted message from `posts.json` and logs it in `
 
 ### Setup
 
-```bash
-# Install dependencies
-pip install tweepy praw
+No external dependencies needed — uses Python standard library only.
 
+```bash
 # Set environment variables (use your actual keys)
-export TWITTER_API_KEY="your_key"
-export TWITTER_API_SECRET="your_secret"
-export TWITTER_ACCESS_TOKEN="your_token"
-export TWITTER_ACCESS_SECRET="your_token_secret"
-export REDDIT_CLIENT_ID="your_client_id"
-export REDDIT_CLIENT_SECRET="your_client_secret"
-export REDDIT_USERNAME="your_username"
-export REDDIT_PASSWORD="your_password"
-export LINKEDIN_ACCESS_TOKEN="your_token"
+export BLUESKY_HANDLE="yourname.bsky.social"
+export BLUESKY_APP_PASSWORD="your_app_password"
+export MASTODON_INSTANCE="https://mastodon.social"
+export MASTODON_ACCESS_TOKEN="your_access_token"
 ```
 
 ### Dry Run (preview without posting)
 
 ```bash
-# Preview the next Twitter post
-python marketing/post_scheduler.py --platform twitter --dry-run
+# Preview the next Bluesky post
+python marketing/post_scheduler.py --platform bluesky --dry-run
 
-# Preview the next Reddit post
-python marketing/post_scheduler.py --platform reddit --dry-run
+# Preview the next Mastodon post
+python marketing/post_scheduler.py --platform mastodon --dry-run
 
 # Preview a specific post
-python marketing/post_scheduler.py --platform twitter --post-id twitter_05 --dry-run
+python marketing/post_scheduler.py --platform bluesky --post-id bsky_05 --dry-run
 ```
 
-### Preview All Unposted Messages
+### Preview All Remaining Posts in Current Cycle
 
 ```bash
-# See all unposted Twitter messages
-python marketing/post_scheduler.py --platform twitter --preview-all
+# See remaining Bluesky posts in the current cycle
+python marketing/post_scheduler.py --platform bluesky --preview-all
 
-# See all unposted Reddit messages
-python marketing/post_scheduler.py --platform reddit --preview-all
+# See remaining Mastodon posts in the current cycle
+python marketing/post_scheduler.py --platform mastodon --preview-all
 ```
 
 ### Post for Real
 
 ```bash
-# Post the next Twitter message
-python marketing/post_scheduler.py --platform twitter
+# Post the next Bluesky message
+python marketing/post_scheduler.py --platform bluesky
 
-# Post a specific Reddit message
-python marketing/post_scheduler.py --platform reddit --post-id reddit_03
+# Post a specific Mastodon message
+python marketing/post_scheduler.py --platform mastodon --post-id masto_03
 ```
 
 ---
@@ -173,40 +137,46 @@ python marketing/post_scheduler.py --platform reddit --post-id reddit_03
 
 Edit `marketing/posts.json` and add new entries to the appropriate platform array.
 
-### Reddit post format:
+### Bluesky post format:
 ```json
 {
-  "id": "reddit_13",
-  "title": "Your post title",
-  "body": "Your post body with **markdown** support.",
-  "target_subreddit": "r/subredditname",
+  "id": "bsky_13",
+  "text": "Your post text (max 300 characters).",
   "tone": "description_of_tone"
 }
 ```
 
-### Twitter post format:
+### Mastodon post format:
 ```json
 {
-  "id": "twitter_13",
-  "text": "Your tweet text (max 280 characters). #hashtags",
-  "tone": "description_of_tone"
-}
-```
-
-### LinkedIn post format:
-```json
-{
-  "id": "linkedin_07",
-  "text": "Your LinkedIn post text. Can be longer form.",
+  "id": "masto_13",
+  "text": "Your post text (max 500 characters). Can include #hashtags.",
   "tone": "description_of_tone"
 }
 ```
 
 **Rules:**
-- Keep IDs unique and sequential (e.g., `twitter_13`, `reddit_13`)
-- Twitter posts must be under 280 characters
-- Reddit posts should sound authentic, not like ads
+- Keep IDs unique and sequential (e.g., `bsky_13`, `masto_13`)
+- Bluesky posts must be under 300 characters
+- Mastodon posts must be under 500 characters
 - Test with `--dry-run` before enabling automated posting
+
+---
+
+## How Post Cycling Works
+
+The scheduler uses modulo arithmetic to cycle through posts infinitely:
+
+1. It counts how many posts have been made for a platform (from `post_log.json`)
+2. It calculates the next index: `total_posted % total_posts`
+3. After posting all 12 posts, it starts over from post #1
+4. This continues forever with zero maintenance
+
+Example: If you have 12 Bluesky posts, the cycle looks like:
+- Posts 1-12: First cycle
+- Posts 13-24: Same 12 posts again (cycle 2)
+- Posts 25-36: Same 12 posts again (cycle 3)
+- ...and so on forever
 
 ---
 
@@ -215,7 +185,7 @@ Edit `marketing/posts.json` and add new entries to the appropriate platform arra
 ```
 marketing/
 ├── README.md              # This file
-├── posts.json             # All marketing posts (30+ messages)
+├── posts.json             # All marketing posts (12 Bluesky + 12 Mastodon + manual platforms)
 ├── post_scheduler.py      # Python script that picks and posts
 ├── post_log.json          # Tracks which posts have been sent
 ├── seo_content.md         # SEO blog outlines and descriptions
@@ -230,14 +200,12 @@ marketing/
 
 ## Troubleshooting
 
-**"All posts have been sent"** — Add more posts to `posts.json` or clear entries from `post_log.json`.
+**Bluesky authentication error** — Make sure your handle and app password are correct. App passwords are different from your account password. Generate a new one at Settings > App Passwords.
 
-**Twitter 403 error** — Your app likely doesn't have Write permissions. Go to developer.twitter.com > App Settings > User authentication > set to Read and Write > regenerate tokens.
-
-**Reddit 403 error** — Check that your account meets the subreddit's posting requirements (karma, account age). Some subreddits also block bot accounts.
-
-**LinkedIn token expired** — LinkedIn OAuth tokens expire after ~60 days. Generate a new one and update the GitHub Secret.
+**Mastodon 401/403 error** — Your access token may be invalid or missing the `write:statuses` scope. Create a new application and token.
 
 **Workflow not running on schedule** — GitHub Actions cron jobs can be delayed by up to 15 minutes. Also, workflows on the default branch must be enabled in the Actions tab.
 
-**Post log conflicts** — If two workflows try to commit `post_log.json` at the same time, one will fail. Re-run the failed workflow.
+**Post log conflicts** — If both Bluesky and Mastodon workflows try to commit `post_log.json` at the same time, one may fail. Re-run the failed workflow.
+
+**Posts cycling too fast** — If you notice the same posts repeating quickly, check `post_log.json` for duplicate entries. You can manually edit the log if needed.
