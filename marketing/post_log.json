@@ -41,6 +41,13 @@
       "timestamp": "2026-03-29T15:23:05.705640+00:00",
       "result": "success",
       "details": "bsky_uri:at://did:plc:qrg7x7qilijgoq2ze2qrudgo/app.bsky.feed.post/3mi7hbt2pw72l"
+    },
+    {
+      "post_id": "masto_03",
+      "platform": "mastodon",
+      "timestamp": "2026-03-30T16:01:20.343204+00:00",
+      "result": "success",
+      "details": "mastodon_url:https://mastodon.social/@brandocalricia/116318960339604469"
     }
   ]
 }
