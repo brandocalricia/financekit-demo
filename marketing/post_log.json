@@ -48,6 +48,13 @@
       "timestamp": "2026-03-30T16:01:20.343204+00:00",
       "result": "success",
       "details": "mastodon_url:https://mastodon.social/@brandocalricia/116318960339604469"
+    },
+    {
+      "post_id": "bsky_05",
+      "platform": "bluesky",
+      "timestamp": "2026-03-31T16:00:24.764361+00:00",
+      "result": "success",
+      "details": "bsky_uri:at://did:plc:qrg7x7qilijgoq2ze2qrudgo/app.bsky.feed.post/3miekcfdvy22u"
     }
   ]
 }
