@@ -62,6 +62,13 @@
       "timestamp": "2026-04-01T16:02:26.270704+00:00",
       "result": "success",
       "details": "bsky_uri:at://did:plc:qrg7x7qilijgoq2ze2qrudgo/app.bsky.feed.post/3mih2uwoe7x2l"
+    },
+    {
+      "post_id": "bsky_07",
+      "platform": "bluesky",
+      "timestamp": "2026-04-02T15:52:49.265879+00:00",
+      "result": "success",
+      "details": "bsky_uri:at://did:plc:qrg7x7qilijgoq2ze2qrudgo/app.bsky.feed.post/3mijksnugnm2r"
     }
   ]
 }
