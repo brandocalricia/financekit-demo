@@ -153,6 +153,13 @@
       "timestamp": "2026-04-14T16:02:41.878045+00:00",
       "result": "success",
       "details": "mastodon_url:https://mastodon.social/@brandocalricia/116403900343329844"
+    },
+    {
+      "post_id": "masto_01",
+      "platform": "mastodon",
+      "timestamp": "2026-04-15T16:00:21.233603+00:00",
+      "result": "success",
+      "details": "mastodon_url:https://mastodon.social/@brandocalricia/116409553450946709"
     }
   ]
 }
